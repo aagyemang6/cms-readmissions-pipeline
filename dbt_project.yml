@@ -1,0 +1,14 @@
+name: cms_readmissions
+version: "1.0.0"
+profile: cms_readmissions
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  cms_readmissions:
+    staging:
+      +materialized: view    # staging = light cleaning, cheap to keep as views
+    marts:
+      +materialized: table   # marts = what the dashboard reads, stored as tables

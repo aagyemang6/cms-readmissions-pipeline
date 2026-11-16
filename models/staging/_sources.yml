@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: cms_raw
+    description: Raw CMS files loaded as-is by load_cms.py. Every column is text.
+    database: cms-readmissions
+    schema: cms_raw
+    tables:
+      - name: hrrp_readmissions
+        description: Hospital Readmissions Reduction Program, FY 2026. One row per hospital per condition.
+      - name: hospital_general_information
+        description: One row per Medicare-registered hospital.
+      - name: unplanned_hospital_visits
+        description: One row per hospital per unplanned-visit measure.

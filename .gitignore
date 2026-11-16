@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+.DS_Store
+# Personal files, not for the public repo
+interview_prep/
+*Resume*.docx
+# Raw data is re-downloadable from data.cms.gov
+cms_data/
+target/
+dbt_packages/
+logs/
+# dbt local anonymous usage id
+.user.yml

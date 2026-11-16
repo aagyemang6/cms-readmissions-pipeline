@@ -1,0 +1,12 @@
+# Connection settings for dbt. No passwords or keys live here:
+# "method: oauth" uses the Google sign-in saved on this computer.
+cms_readmissions:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: cms-readmissions
+      dataset: analytics      # dbt builds its models here; cms_raw stays untouched
+      location: US
+      threads: 4

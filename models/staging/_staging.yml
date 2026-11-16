@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: stg_hrrp_readmissions
+    description: Cleaned and typed HRRP readmissions. One row per hospital per condition.
+    columns:
+      - name: readmission_id
+        description: Facility ID plus measure ID. Unique per row.
+        data_tests:
+          - unique
+          - not_null
+      - name: facility_id
+        data_tests:
+          - not_null
+      - name: condition
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Heart attack', 'Heart failure', 'Pneumonia', 'COPD', 'Hip/knee replacement', 'Bypass surgery (CABG)']
+      - name: excess_readmission_ratio
+        description: Predicted rate divided by expected rate. Above 1.0 is worse than expected. NULL when CMS did not publish it.
+
+  - name: stg_hospitals
+    description: Cleaned and typed hospital attributes. One row per Medicare-registered hospital.
+    columns:
+      - name: facility_id
+        description: CMS facility ID (CCN). Text, because of leading zeros. Unique per row.
+        data_tests:
+          - unique
+          - not_null
+      - name: has_emergency_services
+        data_tests:
+          - not_null
+      - name: hospital_overall_rating
+        description: CMS overall star rating, 1 (worst) to 5 (best). NULL when CMS did not publish one.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+
+  - name: stg_unplanned_visits
+    description: Cleaned and typed unplanned hospital visit measures. One row per hospital per measure.
+    columns:
+      - name: visit_measure_id
+        description: Facility ID plus measure ID. Unique per row.
+        data_tests:
+          - unique
+          - not_null
+      - name: facility_id
+        data_tests:
+          - not_null
+      - name: measure_id
+        data_tests:
+          - not_null
+      - name: score
+        description: The measure's value. Its unit depends on the measure (a rate, a ratio, or return days). NULL when CMS did not publish it.
