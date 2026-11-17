@@ -4,7 +4,7 @@
 
 ## The question
 
-Which U.S. hospitals have worse-than-expected 30-day readmissions, and what do they have in common, such as ownership type, state, hospital type or overall star rating?
+Which U.S. hospitals have worse-than-expected 30-day readmissions, and what do they have in common, such as ownership type, state or overall star rating?
 
 Medicare reduces payments to hospitals with excess readmissions by up to 3% under the Hospital Readmissions Reduction Program (HRRP), so the answer matters to hospital operations and finance leaders.
 
