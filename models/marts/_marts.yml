@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: dim_hospitals
+    description: >
+      One row per hospital. Every hospital in the CMS directory, plus 37 hospitals that appear only
+      in the readmissions data (is_in_hospital_directory = false), so facts never lose a hospital.
+    columns:
+      - name: facility_id
+        description: CMS facility ID (CCN). Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: ownership_group
+        description: CMS ownership type grouped into Non-profit, For-profit, Physician-owned or Government. NULL for hospitals not in the directory.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Non-profit', 'For-profit', 'Physician-owned', 'Government']
+      - name: is_in_hospital_directory
+        description: False for the 37 hospitals found only in the readmissions data. Their attributes are NULL.
+        data_tests:
+          - not_null
+      - name: is_in_readmissions_program
+        description: True if the hospital has rows in fct_readmissions.
+        data_tests:
+          - not_null
+
+  - name: fct_readmissions
+    description: One row per hospital per condition. Readmission measures for the FY 2026 Hospital Readmissions Reduction Program (July 2021 to June 2024).
+    columns:
+      - name: readmission_id
+        description: Facility ID plus measure ID. Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: facility_id
+        description: Foreign key to dim_hospitals.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_hospitals')
+                field: facility_id
+      - name: condition
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Heart attack', 'Heart failure', 'Pneumonia', 'COPD', 'Hip/knee replacement', 'Bypass surgery (CABG)']
+      - name: excess_readmission_ratio
+        description: Predicted rate / expected rate. Above 1.0 is worse than expected. NULL when CMS did not publish it (fewer than 25 cases).
+      - name: is_worse_than_expected
+        description: True when the ratio is above 1.0. NULL when there is no ratio.
+      - name: pct_vs_expected
+        description: How far the hospital is from expected, in percent. +8.0 means 8% more readmissions than expected.
