@@ -1,6 +1,6 @@
 # Hospital Readmissions Analytics Pipeline
 
-**Status: in progress.** The pipeline and the analysis are done (27 data tests, all passing). The Tableau dashboard is next.
+**Status: in progress.** The pipeline and the analysis are done (28 data tests, all passing). The Tableau dashboard is being built; its data and plan are in `dashboard/`.
 
 ## Key findings
 
@@ -64,6 +64,9 @@ profiles.yml             dbt connection settings (Google sign-in, no keys stored
 models/staging/          one cleaning model per raw table, plus tests
 models/marts/            fact, dimension and hospital summary tables, plus tests
 analyses/                analysis queries and FINDINGS.md
+tests/                   business-rule tests that span columns
+export_for_tableau.py    exports the dashboard tables to CSV (Tableau Public cannot read BigQuery)
+dashboard/               dashboard data files and plan
 ```
 
 ## Run it yourself

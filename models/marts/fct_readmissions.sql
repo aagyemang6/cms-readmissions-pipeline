@@ -2,7 +2,7 @@
 -- Holds the readmission measurements. Hospital descriptions live in dim_hospitals; join on facility_id.
 -- This is where business rules go: what counts as "worse than expected", and how far off a hospital is.
 
-with readmissions as (
+with staged as (
 
     select * from {{ ref('stg_hrrp_readmissions') }}
 
@@ -47,7 +47,7 @@ final as (
         period_start_date,
         period_end_date
 
-    from readmissions
+    from staged
 
 )
 
