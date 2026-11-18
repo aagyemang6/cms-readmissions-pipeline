@@ -1,6 +1,6 @@
 # Hospital Readmissions Analytics Pipeline
 
-**Status: in progress.** The pipeline and the analysis are done (29 tests). The Tableau dashboard is next.
+**Status: in progress.** The pipeline and the analysis are done (27 data tests, all passing). The Tableau dashboard is next.
 
 ## Key findings
 
@@ -40,7 +40,7 @@ CMS CSV files  ->  load_cms.py  ->  BigQuery (cms_raw)  ->  dbt staging  ->  dbt
 
 1. **Load.** `load_cms.py` loads each file into BigQuery untouched, with every column as text. The script replaces the tables on each run, so it is safe to re-run.
 2. **Stage.** One dbt model per raw table, at the same grain. Each renames columns, converts text to real types, and turns CMS text codes such as "N/A" and "Not Available" into NULL.
-3. **Model.** Two tables in a star schema, joined on `facility_id`:
+3. **Model.** A star schema (a fact table and a dimension table joined on `facility_id`), plus a summary table:
    - `fct_readmissions`: one row per hospital per condition (18,330 rows) with the readmission measures and the business rules, such as whether a hospital is worse than expected.
    - `dim_hospitals`: one row per hospital (5,472 rows) with location, ownership group and star rating.
    - `agg_hospital_readmissions`: one row per hospital in the program (3,055 rows), with its conditions rolled up and attributes attached, for the dashboard.
