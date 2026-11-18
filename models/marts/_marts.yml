@@ -54,3 +54,20 @@ models:
         description: True when the ratio is above 1.0. NULL when there is no ratio.
       - name: pct_vs_expected
         description: How far the hospital is from expected, in percent. +8.0 means 8% more readmissions than expected.
+
+  - name: agg_hospital_readmissions
+    description: >
+      One row per hospital in the readmissions program, with its condition rows rolled up and its
+      attributes attached. Built for the dashboard. avg_excess_readmission_ratio is a simple average of
+      the conditions the hospital has ratios for; it is NULL for hospitals with no published ratios.
+    columns:
+      - name: facility_id
+        data_tests:
+          - unique
+          - not_null
+      - name: conditions_measured
+        description: Number of the 6 conditions with a published ratio (0 to 6).
+        data_tests:
+          - not_null
+      - name: is_consistently_worse
+        description: True when the hospital has ratios for at least 3 conditions and every one is above 1.0.

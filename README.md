@@ -1,6 +1,17 @@
 # Hospital Readmissions Analytics Pipeline
 
-**Status: in progress.** The raw data is loaded, and the staging layer and the fact and dimension tables are built and tested (26 tests). The analysis and the dashboard are next.
+**Status: in progress.** The pipeline and the analysis are done (29 tests). The Tableau dashboard is next.
+
+## Key findings
+
+From 11,720 readmission ratios across 3,055 hospitals (July 2021 to June 2024). Full write-up with tables and limits: [analyses/FINDINGS.md](analyses/FINDINGS.md).
+
+- **Star rating is the strongest signal.** One-star hospitals average 4.8% more readmissions than expected; five-star hospitals 3.2% fewer.
+- **For-profit hospitals do worse on every one of the six conditions.** The gap is small (about 1.7% more readmissions than expected, against non-profits) but consistent.
+- **Geography matters.** Massachusetts and New Jersey have the highest averages; Utah, Oregon and Washington the lowest.
+- **221 hospitals (9%) are worse than expected on every condition they are measured on,** a manageable list for targeted follow-up programs.
+
+These are associations, not causes.
 
 ## The question
 
@@ -32,7 +43,9 @@ CMS CSV files  ->  load_cms.py  ->  BigQuery (cms_raw)  ->  dbt staging  ->  dbt
 3. **Model.** Two tables in a star schema, joined on `facility_id`:
    - `fct_readmissions`: one row per hospital per condition (18,330 rows) with the readmission measures and the business rules, such as whether a hospital is worse than expected.
    - `dim_hospitals`: one row per hospital (5,472 rows) with location, ownership group and star rating.
-4. **Analyze and visualize (next).** A Tableau Public dashboard.
+   - `agg_hospital_readmissions`: one row per hospital in the program (3,055 rows), with its conditions rolled up and attributes attached, for the dashboard.
+4. **Analyze.** SQL in `analyses/`, one file per question, versioned with the project.
+5. **Visualize (next).** A Tableau Public dashboard.
 
 ## Data quality notes
 
@@ -49,7 +62,8 @@ load_cms.py              loads the raw CSV files into BigQuery
 dbt_project.yml          dbt project settings
 profiles.yml             dbt connection settings (Google sign-in, no keys stored)
 models/staging/          one cleaning model per raw table, plus tests
-models/marts/            fact and dimension tables, plus tests
+models/marts/            fact, dimension and hospital summary tables, plus tests
+analyses/                analysis queries and FINDINGS.md
 ```
 
 ## Run it yourself
